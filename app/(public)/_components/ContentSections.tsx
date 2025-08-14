@@ -239,9 +239,8 @@ export function ContentSections() {
               <Link
                 href="/courses"
                 className={buttonVariants({
-                  variant: "default",
+                  variant: "secondary",
                   size: "lg",
-                  className: "!bg-background !text-foreground",
                 })}
               >
                 Explore Courses
@@ -249,9 +248,8 @@ export function ContentSections() {
               <Link
                 href="/login"
                 className={buttonVariants({
-                  variant: "outline",
+                  variant: "ghost",
                   size: "lg",
-                  className: "!border-background !text-background",
                 })}
               >
                 Sign in

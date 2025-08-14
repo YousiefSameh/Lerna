@@ -27,7 +27,7 @@ export function Hero() {
         >
           <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold leading-tight mb-6">
             Build powerful
-            <span className="text-primary">learning experiences</span>
+            <span className="text-primary"> learning experiences </span>
             <br />
             that scale
           </h1>
