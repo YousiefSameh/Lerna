@@ -10,14 +10,13 @@ import Image from "next/image";
 import Logo from "@/public/logo.svg";
 import { ThemeToggle } from "@/components/ui/theme-toggle";
 
-import { useRouter } from "next/navigation"; 
 import { authClient } from "@/lib/auth-client";
-import { toast } from "sonner";
 import UserDropdown from "./UserDropdown";
 import Link from "next/link";
+import { useSignOut } from "@/hooks/use-signout";
 
 export function Navbar() {
-  const router = useRouter();
+  const handleLogout = useSignOut();
   const { data: session } = authClient.useSession();
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -30,19 +29,6 @@ export function Navbar() {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  const handleLogout = async () => {
-    await authClient.signOut({
-      fetchOptions: {
-        onSuccess: () => {
-          router.push("/");
-          toast.success("Signed out successfully");
-        },
-        onError: () => {
-          toast.error("Failed to sign out");
-        },
-      },
-    });
-  };
 
   return (
     <nav

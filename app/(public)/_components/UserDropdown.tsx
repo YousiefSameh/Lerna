@@ -65,7 +65,7 @@ export default function UserDropdown({ handleLogout, name, email, image }: IUser
           </DropdownMenuItem>
 
           <DropdownMenuItem asChild>
-            <Link href="/dashboard" className="flex items-center gap-2 w-full">
+            <Link href="/admin" className="flex items-center gap-2 w-full">
               <LayoutDashboard className="h-4 w-4" /> <span>Dashboard</span>
             </Link>
           </DropdownMenuItem>
