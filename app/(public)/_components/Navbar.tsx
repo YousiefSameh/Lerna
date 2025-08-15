@@ -2,10 +2,7 @@
 
 import React, { useState, useEffect } from "react";
 import { Button, buttonVariants } from "@/components/ui/button";
-import {
-  Menu,
-  X,
-} from "lucide-react";
+import { Menu, X } from "lucide-react";
 import Image from "next/image";
 import Logo from "@/public/logo.svg";
 import { ThemeToggle } from "@/components/ui/theme-toggle";
@@ -28,7 +25,6 @@ export function Navbar() {
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
-
 
   return (
     <nav
@@ -87,15 +83,25 @@ export function Navbar() {
             {session?.user ? (
               <UserDropdown
                 handleLogout={handleLogout}
-                name={session.user.name}
+                name={
+                  session?.user.name && session.user.name.length > 0
+                    ? session.user.name
+                    : session?.user.email
+                }
                 email={session.user.email}
-                image={session.user.image || ""}
+                image={
+                  session?.user.image ??
+                  `https://avatar.vercel.sh/${session?.user.email}`
+                }
               />
             ) : (
               <>
-                <Link href='/login' className={buttonVariants({
-                  variant: 'default'
-                })}>
+                <Link
+                  href="/login"
+                  className={buttonVariants({
+                    variant: "default",
+                  })}
+                >
                   Get Started
                 </Link>
               </>
@@ -152,14 +158,18 @@ export function Navbar() {
                 {session?.user ? (
                   <UserDropdown
                     handleLogout={handleLogout}
-                    name={session.user.name}
+                    name={
+                      session?.user.name && session.user.name.length > 0
+                        ? session.user.name
+                        : session?.user.email
+                    }
                     email={session.user.email}
                     image={session.user.image || ""}
                   />
                 ) : (
                   <>
                     <Link
-                      href='/login'
+                      href="/login"
                       className={buttonVariants({
                         variant: "default",
                         className: "w-full justify-start",

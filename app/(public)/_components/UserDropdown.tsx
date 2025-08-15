@@ -42,7 +42,7 @@ export default function UserDropdown({ handleLogout, name, email, image }: IUser
           </Button>
         </DropdownMenuTrigger>
 
-        <DropdownMenuContent align="end">
+        <DropdownMenuContent align="end" className="min-w-48">
           <div className="px-4 py-3">
             <p className="text-sm font-medium">{name}</p>
             <p className="text-xs text-muted-foreground truncate">

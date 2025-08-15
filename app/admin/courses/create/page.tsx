@@ -1,3 +1,5 @@
+"use client";
+
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { courseCategories, courseLevels, courseSchema, CourseSchemaType, courseStatus } from "@/lib/zodSchemas";
@@ -15,6 +17,8 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "
 import { Input } from "@/components/ui/input";
 import slugify from "slugify";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Textarea } from "@/components/ui/textarea";
+import { RichTextEditor } from "@/components/rich-text-editor/Editor";
 
 export default function CourseCreationPage() {
   const form = useForm<CourseSchemaType>({
@@ -74,12 +78,12 @@ export default function CourseCreationPage() {
                   </FormItem>
                 )}
               />
-              <div className="flex gap-4">
+              <div className="flex items-end gap-4">
                 <FormField
                   control={form.control}
                   name="slug"
                   render={({ field }) => (
-                    <FormItem className="w-full">
+                    <FormItem className="flex-1 w-full">
                       <FormLabel>Slug</FormLabel>
                       <FormControl>
                         <Input placeholder="Slug" {...field} />
@@ -108,7 +112,7 @@ export default function CourseCreationPage() {
                   <FormItem className="w-full">
                     <FormLabel>Small Description</FormLabel>
                     <FormControl>
-                      <Input
+                      <Textarea
                         placeholder="Small Description"
                         className="min-h-[120px]"
                         {...field}
@@ -126,11 +130,7 @@ export default function CourseCreationPage() {
                   <FormItem className="w-full">
                     <FormLabel>Description</FormLabel>
                     <FormControl>
-                      <Input
-                        placeholder="Description"
-                        className="min-h-[120px]"
-                        {...field}
-                      />
+                      <RichTextEditor field={field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
