@@ -2,7 +2,13 @@
 
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { courseCategories, courseLevels, courseSchema, CourseSchemaType, courseStatus } from "@/lib/zodSchemas";
+import {
+  courseCategories,
+  courseLevels,
+  courseSchema,
+  CourseSchemaType,
+  courseStatus,
+} from "@/lib/zodSchemas";
 import { Button, buttonVariants } from "@/components/ui/button";
 import {
   Card,
@@ -11,17 +17,37 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { ArrowLeft, PlusIcon, SparkleIcon } from "lucide-react";
+import { ArrowLeft, Loader2, PlusIcon, SparkleIcon } from "lucide-react";
 import Link from "next/link";
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import slugify from "slugify";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
 import { RichTextEditor } from "@/components/rich-text-editor/Editor";
 import { Uploader } from "@/components/file-uploader/Uploader";
+import { useTransition } from "react";
+import { tryCatch } from "@/lib/try-catch";
+import { CreateCourse } from "./actions";
+import { toast } from "sonner";
+import { useRouter } from "next/navigation";
 
 export default function CourseCreationPage() {
+  const router = useRouter();
+  const [isPending, startTransition] = useTransition();
   const form = useForm<CourseSchemaType>({
     resolver: zodResolver(courseSchema),
     defaultValues: {
@@ -39,8 +65,22 @@ export default function CourseCreationPage() {
   });
 
   const onSubmit = (values: CourseSchemaType) => {
-    console.log(values);
-  }
+    startTransition(async () => {
+      const { data, error } = await tryCatch(CreateCourse(values));
+
+      if (error) {
+        toast.error("An unexpected error occured. Please try again.");
+      }
+
+      if (data?.status === "success") {
+        toast.success(data.message);
+        form.reset();
+        router.push("/admin/courses");
+      } else if (data?.status === "error") {
+        toast.error(data.message);
+      }
+    });
+  };
   return (
     <>
       <div className="flex items-center gap-4">
@@ -269,8 +309,16 @@ export default function CourseCreationPage() {
                 )}
               />
 
-              <Button type="submit">
-                Create Course <PlusIcon className="ml-1" size={16} />
+              <Button type="submit" disabled={isPending}>
+                {isPending ? (
+                  <>
+                    Creating... <Loader2 className="ml-1 animate-spin" size={16} />
+                  </>
+                ) : (
+                  <>
+                    Create Course <PlusIcon className="ml-1" size={16} />
+                  </>
+                )}
               </Button>
             </form>
           </Form>
