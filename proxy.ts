@@ -13,6 +13,7 @@ const aj = arcjet({
         "CATEGORY:SEARCH_ENGINE", // Google, Bing, etc
         "CATEGORY:MONITOR", // Uptime monitoring services
         "CATEGORY:PREVIEW", // Link previews e.g. Slack, Discord
+        "STRIPE_WEBHOOK", // Allow Stripe webhooks
         // Uncomment to allow these other common bot categories
         // See the full list at https://arcjet.com/bot-list
       ],
