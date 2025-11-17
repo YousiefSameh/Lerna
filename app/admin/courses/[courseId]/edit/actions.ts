@@ -12,16 +12,10 @@ import {
   lessonSchema,
   LessonSchemaType,
 } from "@/lib/zodSchemas";
-import { detectBot, fixedWindow, request } from "@arcjet/next";
+import { fixedWindow, request } from "@arcjet/next";
 import { revalidatePath } from "next/cache";
 
 const aj = arcjet
-  .withRule(
-    detectBot({
-      mode: "LIVE",
-      allow: [],
-    })
-  )
   .withRule(
     fixedWindow({
       mode: "LIVE",
