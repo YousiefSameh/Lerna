@@ -1,3 +1,5 @@
+import "server-only";
+
 import { prisma } from "@/lib/db";
 import { requireAdmin } from "./require-admin";
 
@@ -24,5 +26,4 @@ export async function adminGetCourses() {
   return data;
 }
 
-
-export type AdminCourseType = Awaited<ReturnType<typeof adminGetCourses>>[0]
+export type AdminCourseType = Awaited<ReturnType<typeof adminGetCourses>>[0];
