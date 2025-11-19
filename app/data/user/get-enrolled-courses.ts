@@ -26,6 +26,16 @@ export async function getEnrolledCourses() {
               lessons: {
                 select: {
                   id: true,
+                  lessonProgress: {
+                    where: {
+                      userId: user.id,
+                    },
+                    select: {
+                      id: true,
+                      lessonId: true,
+                      completed: true,
+                    },
+                  },
                 },
               },
             },
@@ -37,3 +47,7 @@ export async function getEnrolledCourses() {
 
   return data;
 }
+
+export type EnrolledCoursesType = Awaited<
+  ReturnType<typeof getEnrolledCourses>
+>[0];
