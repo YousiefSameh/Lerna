@@ -1,3 +1,5 @@
+import "server-only";
+
 import { prisma } from "@/lib/db";
 import { notFound } from "next/navigation";
 
@@ -41,5 +43,5 @@ export async function getIndividualCourse(slug: string) {
     return notFound();
   }
 
-  return course
+  return course;
 }

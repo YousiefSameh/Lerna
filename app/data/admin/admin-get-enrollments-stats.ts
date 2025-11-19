@@ -1,3 +1,5 @@
+import "server-only";
+
 import { prisma } from "@/lib/db";
 import { requireAdmin } from "./require-admin";
 
@@ -31,12 +33,14 @@ export async function getEnrollmentsStats() {
 
   enrollments.forEach((enrollment) => {
     const enrollmentDate = enrollment.createdAt.toISOString().split("T")[0];
-    const dayIndex = last30DaysStats.findIndex((day) => day.date === enrollmentDate);
+    const dayIndex = last30DaysStats.findIndex(
+      (day) => day.date === enrollmentDate
+    );
 
     if (dayIndex !== -1) {
       last30DaysStats[dayIndex].enrollment++;
     }
-  })
+  });
 
   return last30DaysStats;
 }

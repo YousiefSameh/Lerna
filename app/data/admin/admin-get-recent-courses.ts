@@ -1,3 +1,5 @@
+import "server-only";
+
 import { prisma } from "@/lib/db";
 import { requireAdmin } from "./require-admin";
 
@@ -16,8 +18,8 @@ export async function adminGetRecentCourses() {
       status: true,
       price: true,
       filekey: true,
-      slug: true
-    }
+      slug: true,
+    },
   });
 
   return data;

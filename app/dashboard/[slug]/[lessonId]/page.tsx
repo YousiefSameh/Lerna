@@ -1,0 +1,14 @@
+import { getLessonContent } from "@/app/data/course/get-lesson-content"
+import { CourseContent } from "./_components/CourseContent";
+
+interface LessonContentPageProps {
+  params: Promise<{ lessonId: string }>
+}
+
+export default async function LessonContentPage({ params }: LessonContentPageProps) {
+  const { lessonId } = await params;
+  const lesson = await getLessonContent(lessonId);
+  return (
+    <CourseContent data={lesson} />
+  )
+}
