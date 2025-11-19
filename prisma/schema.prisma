@@ -15,17 +15,18 @@ datasource db {
 }
 
 model User {
-  id            String       @id
-  name          String
-  email         String
-  emailVerified Boolean
-  image         String?
-  createdAt     DateTime
-  updatedAt     DateTime
-  sessions      Session[]
-  accounts      Account[]
-  courses       Course[]
-  enrollment    Enrollment[]
+  id             String           @id
+  name           String
+  email          String
+  emailVerified  Boolean
+  image          String?
+  createdAt      DateTime
+  updatedAt      DateTime
+  sessions       Session[]
+  accounts       Account[]
+  courses        Course[]
+  enrollment     Enrollment[]
+  lessonProgress LessonProgress[]
 
   stripeCustomerId String? @unique
 
@@ -91,7 +92,7 @@ model Course {
   description      String
   filekey          String
   price            Int
-  stripePriceId    String     @unique
+  stripePriceId    String      @unique
   duration         Int
   level            CourseLevel @default(Beginner)
   status           CourseState @default(Draft)
@@ -132,20 +133,22 @@ model Lesson {
 
   Chapter   Chapter @relation(fields: [chapterId], references: [id], onDelete: Cascade)
   chapterId String
+
+  lessonProgress LessonProgress[]
 }
 
 model Enrollment {
-  id     String @id @default(uuid())
+  id     String           @id @default(uuid())
   amount Int
   status EnrollmentStatus @default(Pending)
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  Course    Course   @relation(fields: [courseId], references: [id], onDelete: Cascade)
-  courseId  String
-  User      User?    @relation(fields: [userId], references: [id], onDelete: Cascade)
-  userId    String?
+  Course   Course  @relation(fields: [courseId], references: [id], onDelete: Cascade)
+  courseId String
+  User     User?   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId   String?
 
   @@unique([userId, courseId])
 }
@@ -166,4 +169,17 @@ enum EnrollmentStatus {
   Pending
   Active
   Canceled
+}
+
+model LessonProgress {
+  id        String   @id @default(uuid())
+  completed Boolean  @default(false)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId    String
+  lesson    Lesson   @relation(fields: [lessonId], references: [id], onDelete: Cascade)
+  lessonId  String
+
+  @@unique([userId, lessonId])
 }
