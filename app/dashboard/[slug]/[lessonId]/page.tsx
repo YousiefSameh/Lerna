@@ -9,6 +9,6 @@ export default async function LessonContentPage({ params }: LessonContentPagePro
   const { lessonId } = await params;
   const lesson = await getLessonContent(lessonId);
   return (
-    <CourseContent data={lesson} />
+    <CourseContent lesson={lesson} />
   )
 }

@@ -30,7 +30,7 @@ export function CourseProgressCard({ data }: CourseProgressCardProps) {
 
       <CardContent className="p-4">
         <Link
-          href={`/courses/${data.slug}`}
+          href={`/dashboard/${data.slug}`}
           className="font-medium text-lg line-clamp-2 hover:underline group-hover:text-primary transition"
         >
           {data.title}
