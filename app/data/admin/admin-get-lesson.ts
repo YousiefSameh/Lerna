@@ -18,6 +18,15 @@ export async function adminGetLesson(id: string) {
       thumbnailKey: true,
       description: true,
       position: true,
+      exam: {
+        include: {
+          questions: {
+            orderBy: {
+              position: "asc",
+            },
+          },
+        },
+      },
     },
   });
 

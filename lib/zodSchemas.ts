@@ -75,3 +75,23 @@ export const lessonSchema = z.object({
 export type CourseSchemaType = z.infer<typeof courseSchema>;
 export type ChapterSchemaType = z.infer<typeof chapterSchema>;
 export type LessonSchemaType = z.infer<typeof lessonSchema>;
+
+export const questionTypeEnum = z.enum(["TRUE_FALSE", "MULTIPLE_CHOICE", "FILL_IN_BLANK"]);
+
+export const questionSchema = z.object({
+  id: z.string().optional(),
+  text: z.string().min(1, "Question text is required"),
+  type: questionTypeEnum,
+  options: z.array(z.string()),
+  answer: z.string().min(1, "Answer is required"),
+  position: z.number().int(),
+});
+
+export const examSchema = z.object({
+  title: z.string().min(3, "Title must be at least 3 characters"),
+  lessonId: z.string().uuid("Invalid Lesson ID"),
+  questions: z.array(questionSchema).min(1, "At least one question is required"),
+});
+
+export type QuestionSchemaType = z.infer<typeof questionSchema>;
+export type ExamSchemaType = z.infer<typeof examSchema>;
