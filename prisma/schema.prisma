@@ -27,6 +27,7 @@ model User {
   courses        Course[]
   enrollment     Enrollment[]
   lessonProgress LessonProgress[]
+  certificates   Certificate[]
 
   stripeCustomerId String? @unique
 
@@ -102,10 +103,11 @@ model Course {
   createdAt        DateTime    @default(now())
   updatedAt        DateTime    @updatedAt
 
-  user       User?        @relation(fields: [userId], references: [id], onDelete: Cascade)
-  userId     String?
-  chapters   Chapter[]
-  enrollment Enrollment[]
+  user         User?         @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId       String?
+  chapters     Chapter[]
+  enrollment   Enrollment[]
+  certificates Certificate[]
 }
 
 model Chapter {
@@ -182,4 +184,26 @@ model LessonProgress {
   lessonId  String
 
   @@unique([userId, lessonId])
+}
+
+model Certificate {
+  id               String   @id @default(uuid())
+  certificateId    String   @unique
+  completionDate   DateTime @default(now())
+  courseTitle      String
+  studentName      String
+  instructorName   String?
+  courseDuration   Int
+  courseLevel      String
+  courseCategory   String
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+
+  user     User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId   String
+  course   Course @relation(fields: [courseId], references: [id], onDelete: Cascade)
+  courseId String
+
+  @@unique([userId, courseId])
+  @@map("certificate")
 }
