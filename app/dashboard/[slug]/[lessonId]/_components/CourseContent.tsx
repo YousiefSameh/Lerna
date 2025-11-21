@@ -87,6 +87,14 @@ export function CourseContent({ lesson }: CourseContentProps) {
 
   const isCompleted = lesson.lessonProgress.length > 0 && lesson.lessonProgress[0].completed;
   const hasExam = !!lesson.exam;
+  
+  // Check if student has taken the exam before
+  const examAttempts = lesson.exam?.attempts || [];
+  const hasAttemptedExam = examAttempts.length > 0;
+  const bestAttempt = hasAttemptedExam 
+    ? examAttempts.reduce((best, current) => current.score > best.score ? current : best)
+    : null;
+  const attemptsRemaining = 3 - examAttempts.length;
 
   if (showExam && lesson.exam) {
     return (
@@ -117,12 +125,27 @@ export function CourseContent({ lesson }: CourseContentProps) {
       />
       <div className="py-3 border-b flex justify-between items-center">
         {isCompleted ? (
-          <div className="flex gap-2">
+          <div className="flex gap-2 items-center flex-wrap">
             <Button variant={"outline"} className="bg-green-500/10 text-green-500 hover:text-green-600 cursor-default">
               <CheckCircle className="size-4 mr-2 text-green-500" />
               Completed
             </Button>
-            {hasExam && (
+            {hasExam && hasAttemptedExam && bestAttempt && (
+              <>
+                <div className="flex items-center gap-2 px-3 py-2 bg-muted rounded-md">
+                  <span className="text-sm text-muted-foreground">Best Score:</span>
+                  <span className={`text-sm font-bold ${bestAttempt.passed ? 'text-green-500' : 'text-orange-500'}`}>
+                    {bestAttempt.score}%
+                  </span>
+                </div>
+                {attemptsRemaining > 0 && (
+                  <Button onClick={() => setShowExam(true)} variant="outline">
+                    Retry Exam ({attemptsRemaining} {attemptsRemaining === 1 ? 'attempt' : 'attempts'} left)
+                  </Button>
+                )}
+              </>
+            )}
+            {hasExam && !hasAttemptedExam && (
               <Button onClick={() => setShowExam(true)}>
                 Take Exam
               </Button>
