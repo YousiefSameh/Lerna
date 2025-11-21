@@ -29,6 +29,7 @@ import { useForm } from "react-hook-form";
 import { updateLesson } from "../actions";
 import { toast } from "sonner";
 import { useTransition } from "react";
+import { ExamBuilder } from "@/components/exam-builder/ExamBuilder";
 
 interface LessonFormProps {
   data: AdminLessonType;
@@ -166,6 +167,23 @@ export function LessonForm({ data, chapterId, courseId }: LessonFormProps) {
           </Form>
         </CardContent>
       </Card>
+
+      <ExamBuilder 
+        lessonId={data.id} 
+        initialData={data.exam ? {
+          id: data.exam.id,
+          title: data.exam.title,
+          lessonId: data.id,
+          questions: data.exam.questions.map(q => ({
+            id: q.id,
+            text: q.text,
+            type: q.type,
+            options: q.options,
+            answer: q.answer,
+            position: q.position
+          }))
+        } : undefined} 
+      />
     </div>
   );
 }

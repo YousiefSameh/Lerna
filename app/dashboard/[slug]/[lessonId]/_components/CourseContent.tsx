@@ -11,13 +11,18 @@ import { markLessonComplete } from "../actions";
 import { toast } from "sonner";
 import { useConfetti } from "@/hooks/use-confetti";
 
+import { ExamRunner } from "@/components/exam/ExamRunner";
+import { useState } from "react";
+
 interface CourseContentProps {
   lesson: GetLessonContentType;
 }
 
 export function CourseContent({ lesson }: CourseContentProps) {
   const [pending, startTransition] = useTransition();
+  const [showExam, setShowExam] = useState(false);
   const { triggerConfetti } = useConfetti();
+
   const VideoPlayer = ({
     thumbnailKey,
     videoKey,
@@ -79,22 +84,54 @@ export function CourseContent({ lesson }: CourseContentProps) {
       }
     });
   };
+
+  const isCompleted = lesson.lessonProgress.length > 0 && lesson.lessonProgress[0].completed;
+  const hasExam = !!lesson.exam;
+
+  if (showExam && lesson.exam) {
+    return (
+      <div className="flex flex-col h-full bg-background pl-6 py-6">
+        <Button variant="ghost" onClick={() => setShowExam(false)} className="mb-4 w-fit">
+          &larr; Back to Lesson
+        </Button>
+        <ExamRunner 
+          examId={lesson.exam.id} 
+          questions={lesson.exam.questions.map(q => ({
+            id: q.id,
+            text: q.text,
+            type: q.type,
+            options: q.options,
+            position: q.position
+          }))}
+          initialAttemptsUsed={lesson.exam.attempts.length}
+        />
+      </div>
+    );
+  }
+
   return (
     <div className="flex flex-col h-full bg-background pl-6">
       <VideoPlayer
         thumbnailKey={lesson.thumbnailKey || ""}
         videoKey={lesson.videoKey || ""}
       />
-      <div className="py-3 border-b">
-        {lesson.lessonProgress.length < 0 ? (
-          <Button variant={"outline"} className="bg-green-500/10 text-green-500 hover:text-green-600">
-            <CheckCircle className="size-4 mr-2 text-green-500" />
-            Compelete
-          </Button>
+      <div className="py-3 border-b flex justify-between items-center">
+        {isCompleted ? (
+          <div className="flex gap-2">
+            <Button variant={"outline"} className="bg-green-500/10 text-green-500 hover:text-green-600 cursor-default">
+              <CheckCircle className="size-4 mr-2 text-green-500" />
+              Completed
+            </Button>
+            {hasExam && (
+              <Button onClick={() => setShowExam(true)}>
+                Take Exam
+              </Button>
+            )}
+          </div>
         ) : (
           <Button variant="outline" onClick={onSubmit} disabled={pending}>
             <CheckCircle className="size-4 mr-2 text-green-500" />
-            Mark as Compelete
+            Mark as Complete
           </Button>
         )}
       </div>

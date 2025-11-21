@@ -36,6 +36,20 @@ export async function getLessonContent(lessonId: string) {
           },
         },
       },
+      exam: {
+        include: {
+          questions: {
+            orderBy: {
+              position: "asc",
+            },
+          },
+          attempts: {
+            where: {
+              userId: session.id,
+            },
+          },
+        },
+      },
     },
   });
 
