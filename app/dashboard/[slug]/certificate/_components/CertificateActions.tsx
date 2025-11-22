@@ -57,52 +57,6 @@ export function CertificateActions({
 
   return (
     <div className="flex items-center gap-2">
-      <DropdownMenu>
-        <DropdownMenuTrigger asChild>
-          <Button variant="outline" size="sm" disabled={isGeneratingPDF || isGeneratingImage}>
-            {isGeneratingPDF || isGeneratingImage ? (
-              <>
-                <Loader2 className="size-4 mr-2 animate-spin" />
-                Generating...
-              </>
-            ) : (
-              <>
-                <Download className="size-4 mr-2" />
-                Download
-              </>
-            )}
-          </Button>
-        </DropdownMenuTrigger>
-        <DropdownMenuContent align="end">
-          <DropdownMenuItem onClick={() => handleDownload('pdf')} disabled={isGeneratingPDF}>
-            {isGeneratingPDF ? (
-              <>
-                <Loader2 className="size-4 mr-2 animate-spin" />
-                Generating PDF...
-              </>
-            ) : (
-              <>
-                <Download className="size-4 mr-2" />
-                Download as PDF
-              </>
-            )}
-          </DropdownMenuItem>
-          <DropdownMenuItem onClick={() => handleDownload('png')} disabled={isGeneratingImage}>
-            {isGeneratingImage ? (
-              <>
-                <Loader2 className="size-4 mr-2 animate-spin" />
-                Generating Image...
-              </>
-            ) : (
-              <>
-                <FileImage className="size-4 mr-2" />
-                Download as Image
-              </>
-            )}
-          </DropdownMenuItem>
-        </DropdownMenuContent>
-      </DropdownMenu>
-
       <Button onClick={() => handleDownload('pdf')} size="sm" disabled={isGeneratingPDF}>
         {isGeneratingPDF ? (
           <>
