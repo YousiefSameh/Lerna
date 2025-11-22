@@ -1,21 +1,20 @@
 import chromium from "@sparticuz/chromium";
-import { chromium as playwrightChromium } from "playwright-core";
+import puppeteer from "puppeteer-core";
 
 export async function getBrowser() {
-  const isProduction = process.env.NODE_ENV === "production";
-
-  if (isProduction) {
-    chromium.setGraphicsMode = false;
-    const executablePath = await chromium.executablePath();
-
-    return await playwrightChromium.launch({
-      args: chromium.args,
-      executablePath,
-      headless: true,
-    });
-  }
-
-  return await playwrightChromium.launch({
+  const viewport = {
+    deviceScaleFactor: 1,
+    hasTouch: false,
+    height: 1080,
+    isLandscape: true,
+    isMobile: false,
+    width: 1920,
+  };
+  const browser = await puppeteer.launch({
+    args: puppeteer.defaultArgs({ args: chromium.args, headless: true }),
+    defaultViewport: viewport,
+    executablePath: await chromium.executablePath(),
     headless: true,
   });
+  return browser;
 }

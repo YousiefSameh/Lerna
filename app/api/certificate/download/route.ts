@@ -34,7 +34,7 @@ export async function GET(request: NextRequest) {
     const browser = await getBrowser();
     const page = await browser.newPage();
 
-    await page.setContent(html, { waitUntil: "networkidle" });
+    await page.setContent(html, { waitUntil: "networkidle0" });
 
     let buffer: Buffer;
     let contentType: string;
@@ -44,20 +44,22 @@ export async function GET(request: NextRequest) {
     const safeCourseTitle = certificate.courseTitle.replace(/[^a-z0-9]/gi, '_');
 
     if (format === "png") {
-      buffer = await page.screenshot({
+      const screenshot = await page.screenshot({
         type: "png",
         fullPage: true,
-        omitBackground: false, // Ensure white background
+        omitBackground: false,
       });
+      buffer = Buffer.from(screenshot);
       contentType = "image/png";
       filename = `${safeStudentName}_${safeCourseTitle}_Certificate.png`;
     } else {
-      buffer = await page.pdf({
+      const pdf = await page.pdf({
         format: "A4",
         landscape: true,
         printBackground: true,
         margin: { top: "0px", right: "0px", bottom: "0px", left: "0px" },
       });
+      buffer = Buffer.from(pdf);
       contentType = "application/pdf";
       filename = `${safeStudentName}_${safeCourseTitle}_Certificate.pdf`;
     }
