@@ -10,7 +10,8 @@ const nextConfig: NextConfig = {
         protocol: "https"
       }
     ]
-  }
+  },
+  serverExternalPackages: ["@sparticuz/chromium"],
 };
 
 export default nextConfig;
