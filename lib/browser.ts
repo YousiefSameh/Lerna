@@ -1,20 +1,26 @@
-import chromium from "@sparticuz/chromium";
-import puppeteer from "puppeteer-core";
+import chromium from "@sparticuz/chromium-min";
+import puppeteerCore, { Browser } from "puppeteer-core";
+import puppeteer from "puppeteer";
+import { env } from "./env";
+
+let browser: Browser;
+const remoteExecutablePath =
+  "https://github.com/Sparticuz/chromium/releases/download/v121.0.0/chromium-v121.0.0-pack.tar";
 
 export async function getBrowser() {
-  const viewport = {
-    deviceScaleFactor: 1,
-    hasTouch: false,
-    height: 1080,
-    isLandscape: true,
-    isMobile: false,
-    width: 1920,
-  };
-  const browser = await puppeteer.launch({
-    args: puppeteer.defaultArgs({ args: chromium.args, headless: true }),
-    defaultViewport: viewport,
-    executablePath: await chromium.executablePath(),
-    headless: true,
-  });
+  if (browser) return browser;
+
+  if (env.NODE_ENV === "production") {
+    browser = await puppeteerCore.launch({
+      args: chromium.args,
+      executablePath: await chromium.executablePath(remoteExecutablePath),
+      headless: true,
+    });
+  } else {
+    browser = await puppeteer.launch({
+      args: ["--no-sandbox", " --disable-setuid-sandbox"],
+      headless: true,
+    });
+  }
   return browser;
 }
